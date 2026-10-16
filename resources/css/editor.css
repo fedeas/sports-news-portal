@@ -1,0 +1,64 @@
+/* Trix editor for the article form. Tailwind's preflight resets these elements, so restore them here. */
+
+trix-toolbar .trix-button-group--file-tools {
+    display: none;
+}
+
+trix-editor {
+    min-height: 20rem;
+    border-radius: 0.5rem;
+    border-color: var(--color-zinc-200);
+    background-color: var(--color-white);
+    padding: 0.75rem 1rem;
+}
+
+trix-editor:focus {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+trix-editor h2 {
+    margin-block: 0.75rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+trix-editor ul {
+    list-style: disc;
+    padding-inline-start: 1.5rem;
+}
+
+trix-editor ol {
+    list-style: decimal;
+    padding-inline-start: 1.5rem;
+}
+
+trix-editor blockquote {
+    border-inline-start: 3px solid var(--color-zinc-300);
+    padding-inline-start: 1rem;
+    color: var(--color-zinc-600);
+}
+
+trix-editor a {
+    text-decoration: underline;
+}
+
+.dark trix-editor {
+    border-color: var(--color-zinc-600);
+    background-color: var(--color-zinc-800);
+    color: var(--color-zinc-100);
+}
+
+.dark trix-editor blockquote {
+    border-color: var(--color-zinc-500);
+    color: var(--color-zinc-300);
+}
+
+.dark trix-toolbar .trix-button-group,
+.dark trix-toolbar .trix-button {
+    border-color: var(--color-zinc-600);
+}
+
+.dark trix-toolbar .trix-button--icon::before {
+    filter: invert(1);
+}

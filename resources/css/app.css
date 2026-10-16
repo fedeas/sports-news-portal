@@ -1,0 +1,252 @@
+@import 'tailwindcss';
+@import '../../vendor/livewire/flux/dist/flux.css';
+
+@source '../views';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
+@source '../../vendor/livewire/flux/stubs/**/*.blade.php';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Ink on newsprint. No colour carries meaning here: emphasis comes from weight, rules and
+ * reversing black and white, the way a printed sports page works. Photographs stay in colour,
+ * so team kits still read. The neutral scale is a plain warm grey, from newsprint to ink.
+ */
+@theme {
+    --font-sans: 'Source Serif 4', ui-serif, Georgia, serif;
+    /* Furniture: navigation, labels, bylines, buttons. */
+    --font-ui: 'Inter Tight', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    /* Agate: the small condensed type a sports page uses for scores, tables and timestamps. */
+    --font-condensed: 'Fira Sans Condensed', 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+
+    --color-zinc-50: #f7f6f4;
+    --color-zinc-100: #efeeeb;
+    --color-zinc-200: #e0ded9;
+    --color-zinc-300: #c7c4bd;
+    --color-zinc-400: #9b9791;
+    --color-zinc-500: #726e69;
+    --color-zinc-600: #565350;
+    --color-zinc-700: #3d3b39;
+    --color-zinc-800: #262524;
+    --color-zinc-900: #171717;
+    --color-zinc-950: #0d0d0d;
+
+    --color-ink: #121212;
+    --color-paper: #f7f6f4;
+
+    --color-accent: var(--color-ink);
+    --color-accent-content: var(--color-ink);
+    --color-accent-foreground: var(--color-white);
+
+    /* Surfaces that carry the masthead, the rules and the scoreboard. */
+    --color-brand: var(--color-ink);
+    --color-brand-content: var(--color-ink);
+}
+
+@layer theme {
+    .dark {
+        --color-accent: var(--color-white);
+        --color-accent-content: var(--color-white);
+        --color-accent-foreground: var(--color-ink);
+        --color-brand: var(--color-white);
+        --color-brand-content: var(--color-white);
+    }
+}
+
+@layer base {
+
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+}
+
+[data-flux-field]:not(ui-radio, ui-checkbox) {
+    @apply grid gap-2;
+}
+
+[data-flux-label] {
+    @apply  !mb-0 !leading-tight;
+}
+
+input:focus[data-flux-control],
+textarea:focus[data-flux-control],
+select:focus[data-flux-control] {
+    @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
+}
+
+/* Article body HTML (purified on save): restore typography that Tailwind's preflight resets. */
+@layer components {
+    /* Figures that line up in a column: scores, tables, clocks. */
+    .figures {
+        font-family: var(--font-condensed);
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0.01em;
+    }
+
+    /* The sections drawer: a <details> element styled as a panel sliding in from the side. */
+    .sections-menu > summary::-webkit-details-marker {
+        display: none;
+    }
+
+    /* Some browsers keep the panel laid out while the details is closed; hide it outright. */
+    .sections-menu:not([open]) .sections-menu__backdrop,
+    .sections-menu:not([open]) .sections-menu__drawer {
+        display: none;
+    }
+
+    .sections-menu__backdrop {
+        @apply fixed inset-0 z-40 bg-ink/40;
+    }
+
+    .sections-menu__drawer {
+        @apply fixed inset-y-0 start-0 z-50 w-80 max-w-[85vw] overflow-y-auto overscroll-contain border-e-4 border-ink bg-white dark:border-white dark:bg-zinc-950;
+    }
+
+    .sections-menu__row > summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .sections-menu__row[open] > summary .sections-menu__chevron {
+        @apply rotate-180;
+    }
+
+    /* The search bar: opens over the masthead from the icon towards the left. */
+    .site-search {
+        @apply absolute inset-y-0 start-4 end-4 z-40 lg:end-6 bg-white sm:start-auto sm:w-[36rem] dark:bg-zinc-950;
+    }
+
+    /* The bar has its own close button; the browser's clear button would be a second cross. */
+    .site-search input::-webkit-search-cancel-button {
+        appearance: none;
+    }
+
+    .site-search__suggestions {
+        @apply absolute inset-x-0 top-full z-50 max-h-[70vh] overflow-y-auto border-2 border-ink bg-white shadow-lg dark:border-white dark:bg-zinc-950;
+    }
+
+    .site-search__group-label {
+        @apply font-ui px-3 pt-3 pb-1 text-xs font-bold tracking-wide text-zinc-500 uppercase dark:text-zinc-400;
+    }
+
+    .site-search__option {
+        @apply flex items-center gap-3 px-3 py-2;
+    }
+
+    .site-search__option:hover,
+    .site-search__option[aria-selected='true'] {
+        @apply bg-zinc-100 dark:bg-zinc-900;
+    }
+
+    .site-search__thumb {
+        @apply size-12 shrink-0 bg-zinc-200 object-cover dark:bg-zinc-800;
+    }
+
+    .site-search__title {
+        @apply block text-sm leading-snug font-bold;
+    }
+
+    .site-search__meta {
+        @apply font-ui block text-xs text-zinc-500 dark:text-zinc-400;
+    }
+
+    .site-search__note {
+        @apply font-ui px-3 py-3 text-sm text-zinc-600 dark:text-zinc-400;
+    }
+
+    .site-search__all {
+        @apply font-ui block border-t border-zinc-200 px-3 py-2.5 text-sm font-semibold underline underline-offset-2 hover:no-underline dark:border-zinc-800;
+    }
+
+    /* The rule under a section title, as a printed page sets one. */
+    .section-heading {
+        @apply font-ui flex items-baseline justify-between gap-4 border-b-2 border-ink pb-1.5 tracking-tight dark:border-white;
+    }
+
+    /* Every page runs the full width of the window, so the rail sits against its right edge. */
+    .site-container {
+        @apply w-full px-4 lg:px-6;
+    }
+
+    /* The news on the left, a narrow column at the far right, split by a hairline. */
+    .page-with-rail {
+        @apply grid gap-10 lg:grid-cols-[minmax(0,1fr)_18rem] lg:gap-0;
+    }
+
+    .page-with-rail__rail {
+        @apply lg:ms-8 lg:border-s lg:border-zinc-200 lg:ps-6 dark:lg:border-zinc-800;
+    }
+
+    /* The one piece of motion on the site: something is happening right now. */
+    .live-dot {
+        @apply inline-block size-2 rounded-full bg-current;
+        animation: live-pulse 1.6s ease-in-out infinite;
+    }
+
+    @keyframes live-pulse {
+        50% {
+            opacity: 0.25;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .live-dot {
+            animation: none;
+        }
+    }
+
+    .article-body {
+        /* Around 70 characters a line, where reading stays comfortable. */
+        @apply max-w-[68ch] text-lg leading-relaxed text-zinc-800 dark:text-zinc-200;
+    }
+
+    /* The opening paragraph carries the reader in. */
+    .article-body > :where(p:first-child) {
+        @apply text-xl leading-relaxed text-zinc-900 dark:text-zinc-100;
+    }
+
+    .article-body :where(p, div, ul, ol, blockquote, pre) {
+        @apply mb-5;
+    }
+
+    .article-body :where(h2) {
+        @apply mt-10 mb-3 text-2xl font-extrabold text-zinc-900 dark:text-white;
+    }
+
+    .article-body :where(h3) {
+        @apply mt-8 mb-3 text-xl font-bold text-zinc-900 dark:text-white;
+    }
+
+    .article-body :where(a) {
+        @apply font-medium text-brand-content underline underline-offset-2;
+    }
+
+    .article-body :where(ul) {
+        @apply list-disc ps-6;
+    }
+
+    .article-body :where(ol) {
+        @apply list-decimal ps-6;
+    }
+
+    .article-body :where(li) {
+        @apply mb-1;
+    }
+
+    /* A pull quote, set the way a paper sets one: larger, italic, between rules. */
+    .article-body :where(blockquote) {
+        @apply border-y-2 border-ink px-0 py-4 text-2xl leading-snug font-medium italic text-zinc-900 dark:border-white dark:text-white;
+    }
+
+    .article-body :where(pre) {
+        @apply overflow-x-auto bg-zinc-100 p-4 text-sm dark:bg-zinc-800;
+    }
+}
+
+/* \[:where(&)\]:size-4 {
+    @apply size-4;
+} */

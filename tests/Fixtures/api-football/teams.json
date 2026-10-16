@@ -1,0 +1,13 @@
+{
+    "get": "teams",
+    "parameters": { "league": "318", "season": "2025" },
+    "errors": [],
+    "results": 4,
+    "paging": { "current": 1, "total": 1 },
+    "response": [
+        { "team": { "id": 101, "name": "Demo Lions", "code": "LIO", "country": "Cyprus", "founded": 1930, "national": false, "logo": "https://example.test/101.png" } },
+        { "team": { "id": 102, "name": "Demo Eagles", "code": "EAG", "country": "Cyprus", "founded": 1948, "national": false, "logo": "https://example.test/102.png" } },
+        { "team": { "id": 103, "name": "Demo Harbour", "code": null, "country": "Cyprus", "founded": null, "national": false, "logo": null } },
+        { "team": { "id": null, "name": "" } }
+    ]
+}
