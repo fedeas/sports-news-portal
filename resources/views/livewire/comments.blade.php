@@ -24,9 +24,9 @@
                         {{ __('Reply') }}
                     </button>
 
-                    @if ($comment->replies->isNotEmpty())
+                    @if ($comment->approvedReplies->isNotEmpty())
                         <ol class="mt-4 space-y-4 border-s-2 border-zinc-200 ps-4 dark:border-zinc-800">
-                            @foreach ($comment->replies as $reply)
+                            @foreach ($comment->approvedReplies as $reply)
                                 <li wire:key="comment-{{ $reply->id }}">
                                     @include('livewire.partials.comment', ['comment' => $reply])
                                 </li>

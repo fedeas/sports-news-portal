@@ -112,10 +112,10 @@
             </ul>
         @endif
 
-        @if ($article->leagues->isNotEmpty() || $article->teams->isNotEmpty())
+        @if ($article->activeLeagues->isNotEmpty() || $article->activeTeams->isNotEmpty())
             <nav aria-label="{{ __('Teams and leagues') }}" class="mt-4">
                 <ul class="flex flex-wrap gap-2">
-                    @foreach ([...$article->leagues, ...$article->teams] as $subject)
+                    @foreach ([...$article->activeLeagues, ...$article->activeTeams] as $subject)
                         <li>
                             <a
                                 href="{{ $subject->url() }}"

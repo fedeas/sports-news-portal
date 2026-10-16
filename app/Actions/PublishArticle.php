@@ -21,7 +21,7 @@ class PublishArticle
             : now();
 
         $article->status = $publishAt->isFuture() ? ArticleStatus::Scheduled : ArticleStatus::Published;
-        $article->published_at = $publishAt;
+        $article->published_at = $publishAt->toImmutable();
         $article->save();
 
         return $article;

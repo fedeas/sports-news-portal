@@ -142,7 +142,7 @@ class SiteStructureSeeder extends Seeder
             ]);
         }
 
-        $this->command?->info('Sections and competitions ready.');
+        $this->command->info('Sections and competitions ready.');
     }
 
     /**

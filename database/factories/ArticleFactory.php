@@ -29,7 +29,7 @@ class ArticleFactory extends Factory
             'title' => $title,
             'slug' => Str::slug($title),
             'excerpt' => fake()->sentence(15),
-            'body' => '<p>'.implode('</p><p>', fake()->paragraphs(3)).'</p>',
+            'body' => collect(range(1, 3))->map(fn () => '<p>'.fake()->paragraph().'</p>')->implode(''),
             'status' => ArticleStatus::Draft,
             'published_at' => null,
             'is_breaking' => false,

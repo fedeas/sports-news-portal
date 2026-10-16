@@ -7,6 +7,7 @@ use App\Actions\RefreshLiveScores;
 use App\Concerns\FlushesContentCache;
 use App\Enums\FixtureStatus;
 use App\Services\ContentCache;
+use Carbon\CarbonImmutable;
 use Database\Factories\FixtureFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -14,14 +15,13 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
  * @property int $season_id
  * @property int $home_team_id
  * @property int $away_team_id
- * @property Carbon $kickoff_at UTC
+ * @property CarbonImmutable $kickoff_at UTC
  * @property FixtureStatus $status
  * @property int|null $score_home
  * @property int|null $score_away
@@ -30,8 +30,8 @@ use Illuminate\Support\Carbon;
  * @property string|null $venue
  * @property string|null $external_source
  * @property string|null $external_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property CarbonImmutable|null $created_at
+ * @property CarbonImmutable|null $updated_at
  */
 #[Fillable([
     'season_id', 'home_team_id', 'away_team_id', 'kickoff_at', 'status', 'score_home', 'score_away',
@@ -85,7 +85,7 @@ class Fixture extends Model
                 $recalculate->handle($season);
             }
 
-            if ($fixture->wasChanged('season_id') && $previousSeason = Season::query()->find($fixture->getOriginal('season_id'))) {
+            if ($fixture->wasChanged('season_id') && $previousSeason = Season::query()->whereKey($fixture->getOriginal('season_id'))->first()) {
                 $recalculate->handle($previousSeason);
             }
         });

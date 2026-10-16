@@ -5,13 +5,13 @@ namespace App\Models;
 use App\Concerns\FlushesContentCache;
 use App\Enums\MediaCollection;
 use App\Services\ContentCache;
+use Carbon\CarbonImmutable;
 use Database\Factories\MediaFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -29,8 +29,8 @@ use Illuminate\Support\Facades\Storage;
  * @property string|null $mediable_type
  * @property int|null $mediable_id
  * @property int|null $uploaded_by
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property CarbonImmutable|null $created_at
+ * @property CarbonImmutable|null $updated_at
  */
 #[Fillable(['alt_text'])]
 class Media extends Model

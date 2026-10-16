@@ -37,7 +37,7 @@ class SearchArticles
 
         $booleanTerm = $this->booleanModeTerm($term);
 
-        if ($booleanTerm !== null && in_array($query->getConnection()->getDriverName(), ['mysql', 'mariadb'], true)) {
+        if ($booleanTerm !== null && in_array($query->getModel()->getConnection()->getDriverName(), ['mysql', 'mariadb'], true)) {
             $query->whereFullText(['title', 'excerpt'], $booleanTerm, ['mode' => 'boolean']);
         } else {
             foreach ($this->words($term) ?: [$term] as $word) {

@@ -31,6 +31,6 @@ trait HasCountry
         // ICU names every code it does not know after the reserved "ZZ" (Unknown Region).
         $unknown = Locale::getDisplayRegion('-ZZ', $locale);
 
-        return $name !== '' && $name !== $unknown ? $name : $this->country;
+        return $name !== false && $name !== '' && $name !== $unknown ? $name : $this->country;
     }
 }

@@ -6,6 +6,7 @@ use App\Concerns\FlushesContentCache;
 use App\Concerns\RecordsSlugHistory;
 use App\Enums\ArticleStatus;
 use App\Services\ContentCache;
+use Carbon\CarbonImmutable;
 use Database\Factories\ArticleFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -17,7 +18,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
@@ -32,7 +32,7 @@ use Illuminate\Support\Str;
  * @property int|null $featured_image_id
  * @property int|null $og_image_id
  * @property ArticleStatus $status
- * @property Carbon|null $published_at
+ * @property CarbonImmutable|null $published_at
  * @property bool $is_breaking
  * @property bool $is_featured
  * @property int $view_count
@@ -40,9 +40,9 @@ use Illuminate\Support\Str;
  * @property string|null $meta_description
  * @property string|null $canonical_url
  * @property int|null $created_by
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Carbon|null $deleted_at
+ * @property CarbonImmutable|null $created_at
+ * @property CarbonImmutable|null $updated_at
+ * @property CarbonImmutable|null $deleted_at
  */
 #[Fillable([
     'category_id', 'author_id', 'title', 'slug', 'excerpt', 'body',
@@ -206,6 +206,26 @@ class Article extends Model
     public function leagues(): MorphToMany
     {
         return $this->morphedByMany(League::class, 'subject', 'article_subjects')->withTimestamps();
+    }
+
+    /**
+     * The article's teams that have a public page, by name.
+     *
+     * @return MorphToMany<Team, $this>
+     */
+    public function activeTeams(): MorphToMany
+    {
+        return $this->teams()->active()->orderBy('name');
+    }
+
+    /**
+     * The article's leagues that have a public page, by name.
+     *
+     * @return MorphToMany<League, $this>
+     */
+    public function activeLeagues(): MorphToMany
+    {
+        return $this->leagues()->active()->orderBy('name');
     }
 
     /**

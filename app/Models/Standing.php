@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Database\Factories\StandingFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Carbon;
 
 /**
  * A team's row in a season's league table. Maintained by RecalculateStandings; never edited by hand.
@@ -25,7 +25,7 @@ use Illuminate\Support\Carbon;
  * @property int $points
  * @property int|null $position
  * @property string|null $form Last results, oldest first: W, D or L per match
- * @property Carbon|null $updated_at
+ * @property CarbonImmutable|null $updated_at
  */
 #[Fillable([
     'season_id', 'team_id', 'played', 'won', 'drawn', 'lost', 'goals_for', 'goals_against',

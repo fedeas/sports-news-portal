@@ -7,7 +7,6 @@ use App\Models\League;
 use App\Models\Season;
 use App\Models\Team;
 use App\Services\ContentCache;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class BuildNavigation
 {
@@ -46,7 +45,14 @@ class BuildNavigation
     }
 
     /**
-     * @return array<int, array<string, mixed>>
+     * @return array<int, array{
+     *     name: string,
+     *     url: string,
+     *     slug: string,
+     *     icon: ?string,
+     *     children: array<int, array{name: string, url: string, icon: ?string}>,
+     *     leagues: array<int, array{name: string, url: string, teams: array<int, array{name: string, url: string}>}>,
+     * }>
      */
     private function tree(): array
     {
@@ -55,7 +61,7 @@ class BuildNavigation
         return Category::query()
             ->active()
             ->whereNull('parent_id')
-            ->with(['children' => fn (HasMany $query) => $query->active()->orderBy('sort_order')->orderBy('name')])
+            ->with('activeChildren')
             ->orderBy('sort_order')
             ->orderBy('name')
             ->get()
@@ -64,7 +70,7 @@ class BuildNavigation
                 'slug' => $category->slug,
                 'url' => $category->url(),
                 'icon' => $category->icon?->value,
-                'children' => $category->children
+                'children' => $category->activeChildren
                     // A subsection's URL is /{section}/{subsection}, so hand it the parent it already has.
                     ->map(fn (Category $child): array => [
                         'name' => $child->name,

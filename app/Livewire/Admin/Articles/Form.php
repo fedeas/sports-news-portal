@@ -17,9 +17,9 @@ use App\Models\Tag;
 use App\Models\Team;
 use Carbon\CarbonImmutable;
 use Flux\Flux;
+use Illuminate\Contracts\Database\Eloquent\Builder as BuilderContract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -64,7 +64,9 @@ class Form extends Component
     public array $co_author_ids = [];
 
     /**
-     * @var array<int, string>
+     * Tag names as the browser sent them; every one is checked before use.
+     *
+     * @var array<int, mixed>
      */
     public array $tag_names = [];
 
@@ -175,7 +177,8 @@ class Form extends Component
             $this->slug = $generateUniqueSlug->handle($this->title, Article::class, $article->id, 220, alsoUniqueAgainst: [Category::class]);
         }
 
-        $this->body = Purify::config('article')->clean($this->body);
+        $body = Purify::config('article')->clean($this->body);
+        $this->body = is_string($body) ? $body : '';
 
         if (trim(html_entity_decode(strip_tags($this->body))) === '') {
             $this->body = '';
@@ -442,7 +445,7 @@ class Form extends Component
     {
         return Category::query()
             ->whereNull('parent_id')
-            ->with(['children' => fn (HasMany $query) => $query->orderBy('sort_order')->orderBy('name')])
+            ->with(['children' => fn (BuilderContract $query) => $query->orderBy('sort_order')->orderBy('name')])
             ->orderBy('sort_order')
             ->orderBy('name')
             ->get();

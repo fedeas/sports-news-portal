@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Concerns\FlushesContentCache;
 use App\Services\ContentCache;
+use Carbon\CarbonImmutable;
 use Database\Factories\SeasonFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,18 +12,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
  * @property int $league_id
  * @property string $name e.g. "2025/2026"
- * @property Carbon|null $starts_on
- * @property Carbon|null $ends_on
+ * @property CarbonImmutable|null $starts_on
+ * @property CarbonImmutable|null $ends_on
  * @property bool $is_current
  * @property string|null $external_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property CarbonImmutable|null $created_at
+ * @property CarbonImmutable|null $updated_at
  */
 #[Fillable(['league_id', 'name', 'starts_on', 'ends_on', 'is_current', 'external_id'])]
 class Season extends Model

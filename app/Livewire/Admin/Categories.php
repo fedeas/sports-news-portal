@@ -10,9 +10,9 @@ use App\Models\Category;
 use App\Models\Sport;
 use App\Rules\NotReservedSlug;
 use Flux\Flux;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
@@ -206,7 +206,7 @@ class Categories extends Component
             ->whereNull('parent_id')
             ->with([
                 'sport',
-                'children' => fn (HasMany $query) => $query->with('sport')->orderBy('sort_order')->orderBy('name'),
+                'children' => fn (Builder $query) => $query->with('sport')->orderBy('sort_order')->orderBy('name'),
             ])
             ->orderBy('sort_order')
             ->orderBy('name')

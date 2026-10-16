@@ -85,7 +85,7 @@ class RecalculateStandings
     }
 
     /**
-     * @param  array{played: int, won: int, drawn: int, lost: int, goals_for: int, goals_against: int, form: string}  $row
+     * @param  array{team_id: int, played: int, won: int, drawn: int, lost: int, goals_for: int, goals_against: int, form: string}  $row
      */
     private function recordResult(array &$row, int $scored, int $conceded): void
     {

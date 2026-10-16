@@ -69,7 +69,8 @@ final class ApiFootballProvider implements SportsDataProvider
         $item = $this->get('leagues', ['id' => $leagueId, 'season' => $season])[0] ?? null;
 
         $name = Arr::get((array) $item, 'league.name');
-        $seasonItem = collect(Arr::get((array) $item, 'seasons', []))
+        $seasons = Arr::get((array) $item, 'seasons');
+        $seasonItem = collect(is_array($seasons) ? $seasons : [])
             ->first(fn (mixed $candidate) => is_array($candidate) && (string) ($candidate['year'] ?? '') === $season);
 
         if (! is_string($name) || $name === '' || ! is_array($seasonItem)) {

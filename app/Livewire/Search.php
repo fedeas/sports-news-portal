@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Actions\SearchArticles;
 use App\Actions\SearchTeams;
+use App\Models\Article;
 use App\Models\Team;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\View;
@@ -41,7 +42,7 @@ class Search extends Component
     /**
      * The results for the current term, null while the term is too short.
      *
-     * @return array{rateLimited: bool, articles?: LengthAwarePaginator, teams?: Collection<int, Team>}|null
+     * @return array{rateLimited: bool, articles?: LengthAwarePaginator<int, Article>, teams?: Collection<int, Team>}|null
      */
     #[Computed]
     public function results(): ?array

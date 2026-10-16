@@ -7,7 +7,6 @@ use App\Models\Category;
 use App\Services\ContentCache;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection as SupportCollection;
 
 class BuildHomepage
@@ -170,14 +169,14 @@ class BuildHomepage
         return Category::query()
             ->active()
             ->whereNull('parent_id')
-            ->with(['children' => fn (HasMany $query) => $query->active()->select(['id', 'parent_id'])])
+            ->with('activeChildren:id,parent_id')
             ->orderBy('sort_order')
             ->orderBy('name')
             ->get()
             ->map(fn (Category $category) => [
                 'category' => $category,
                 'articles' => $this->listing()
-                    ->whereIn('category_id', [$category->id, ...$category->children->pluck('id')])
+                    ->whereIn('category_id', [$category->id, ...$category->activeChildren->pluck('id')])
                     ->limit(self::CATEGORY_BLOCK_LIMIT)
                     ->get(),
             ])

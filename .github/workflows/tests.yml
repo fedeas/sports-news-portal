@@ -42,5 +42,8 @@ jobs:
       - name: Check formatting
         run: composer lint:check
 
+      - name: Static analysis
+        run: composer types:check
+
       - name: Run tests
         run: php artisan test

@@ -6,6 +6,7 @@ use App\Concerns\FlushesContentCache;
 use App\Concerns\HasCountry;
 use App\Concerns\RecordsSlugHistory;
 use App\Services\ContentCache;
+use Carbon\CarbonImmutable;
 use Database\Factories\LeagueFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -15,7 +16,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
@@ -28,8 +28,8 @@ use Illuminate\Support\Carbon;
  * @property string|null $external_source
  * @property string|null $external_id
  * @property bool $is_active
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property CarbonImmutable|null $created_at
+ * @property CarbonImmutable|null $updated_at
  */
 #[Fillable(['sport_id', 'name', 'slug', 'country', 'tier', 'external_source', 'external_id', 'is_active'])]
 class League extends Model

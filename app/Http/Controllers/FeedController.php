@@ -47,7 +47,7 @@ class FeedController extends Controller
         $xml->writeElement('link', route('home'));
         $xml->writeElement('description', __('Sports news from Cyprus and Greece: football, basketball, results and live scores.'));
         $xml->writeElement('language', (string) config('app.locale'));
-        $xml->writeElement('lastBuildDate', ($articles->first()?->published_at ?? now())->toRfc2822String());
+        $xml->writeElement('lastBuildDate', ($articles->first()->published_at ?? now())->toRfc2822String());
 
         $xml->startElement('atom:link');
         $xml->writeAttribute('href', route('feed'));

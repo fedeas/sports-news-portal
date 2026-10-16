@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Database\Factories\SlugHistoryFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Support\Carbon;
 
 /**
  * A slug a model used to have, kept so its old URLs can redirect with a 301.
@@ -17,7 +17,7 @@ use Illuminate\Support\Carbon;
  * @property string $sluggable_type
  * @property int $sluggable_id
  * @property string $slug
- * @property Carbon|null $created_at
+ * @property CarbonImmutable|null $created_at
  */
 #[Table(name: 'slug_history')]
 #[Fillable(['sluggable_type', 'sluggable_id', 'slug'])]

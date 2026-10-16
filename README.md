@@ -36,7 +36,7 @@ The site name, sections and competitions are configuration and seed data, so the
 - PHP 8.4, Laravel 13, Livewire 4, Flux UI, Fortify
 - Tailwind CSS 4, Vite
 - MySQL 8, Redis (cache, queues, sessions)
-- Pest for tests, Pint for formatting
+- Pest for tests, Pint for formatting, PHPStan (Larastan, level 7) for static analysis
 
 ## Requirements
 
@@ -90,7 +90,7 @@ The suite runs on an in-memory SQLite database, so it needs no database server:
 php artisan test
 ```
 
-Check formatting with `composer lint:check`, or fix it with `composer lint`.
+Check formatting with `composer lint:check` (or fix it with `composer lint`) and run static analysis with `composer types:check`.
 
 ## Scheduled jobs
 

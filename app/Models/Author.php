@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Database\Factories\AuthorFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Carbon;
 
 /**
  * A public byline. Articles reference authors, never users, so deleting an account keeps its bylines.
@@ -20,10 +20,10 @@ use Illuminate\Support\Carbon;
  * @property string|null $bio
  * @property int|null $photo_media_id
  * @property string|null $email
- * @property array{twitter?: string, facebook?: string, instagram?: string}|null $social_links
+ * @property array<string, mixed>|null $social_links Stored JSON; socialLinks() returns only the safe ones.
  * @property bool $is_active
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property CarbonImmutable|null $created_at
+ * @property CarbonImmutable|null $updated_at
  */
 #[Fillable(['user_id', 'name', 'slug', 'bio', 'email', 'social_links', 'is_active'])]
 class Author extends Model

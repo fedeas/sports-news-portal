@@ -6,6 +6,7 @@ use App\Concerns\FlushesContentCache;
 use App\Concerns\RecordsSlugHistory;
 use App\Enums\SectionIcon;
 use App\Services\ContentCache;
+use Carbon\CarbonImmutable;
 use Database\Factories\CategoryFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -14,7 +15,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
@@ -28,8 +28,8 @@ use Illuminate\Support\Carbon;
  * @property string|null $meta_description
  * @property int $sort_order
  * @property bool $is_active
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property CarbonImmutable|null $created_at
+ * @property CarbonImmutable|null $updated_at
  */
 #[Fillable(['sport_id', 'parent_id', 'name', 'slug', 'icon', 'description', 'meta_title', 'meta_description', 'sort_order', 'is_active'])]
 class Category extends Model
@@ -104,6 +104,16 @@ class Category extends Model
     public function children(): HasMany
     {
         return $this->hasMany(Category::class, 'parent_id');
+    }
+
+    /**
+     * The subsections readers can see, in menu order.
+     *
+     * @return HasMany<Category, $this>
+     */
+    public function activeChildren(): HasMany
+    {
+        return $this->children()->active()->orderBy('sort_order')->orderBy('name');
     }
 
     /**

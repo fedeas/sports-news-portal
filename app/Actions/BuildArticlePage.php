@@ -6,7 +6,6 @@ use App\Models\Article;
 use App\Models\Author;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Str;
 
@@ -23,8 +22,7 @@ class BuildArticlePage
     {
         return [
             'category.parent', 'author', 'coAuthors', 'tags', 'featuredImage', 'ogImage',
-            'teams' => fn (MorphToMany $query) => $query->active()->orderBy('name'),
-            'leagues' => fn (MorphToMany $query) => $query->active()->orderBy('name'),
+            'activeTeams', 'activeLeagues',
         ];
     }
 
@@ -42,7 +40,7 @@ class BuildArticlePage
             'description' => $article->metaDescription(),
             'canonical' => $article->canonical_url ?? $article->url(),
             'image' => $socialImage?->largestUrl(),
-            'bylineAuthors' => collect([$article->author, ...$article->coAuthors])->unique('id')->values(),
+            'bylineAuthors' => $this->bylineAuthors($article),
             'relatedArticles' => Article::query()
                 ->published()
                 ->where('category_id', $article->category_id)
@@ -73,8 +71,7 @@ class BuildArticlePage
             'dateModified' => $article->updated_at->toIso8601String(),
             'articleSection' => $article->category->name,
             'keywords' => $article->tags->map(fn (Tag $tag) => $tag->name)->join(', ') ?: null,
-            'author' => collect([$article->author, ...$article->coAuthors])
-                ->unique('id')
+            'author' => $this->bylineAuthors($article)
                 ->map(fn (Author $author) => ['@type' => 'Person', 'name' => $author->name])
                 ->values()
                 ->all(),
@@ -84,5 +81,16 @@ class BuildArticlePage
                 'url' => url('/'),
             ],
         ], fn (mixed $value) => $value !== null);
+    }
+
+    /**
+     * The primary writer then the co-authors, each once.
+     *
+     * @return SupportCollection<int, Author>
+     */
+    private function bylineAuthors(Article $article): SupportCollection
+    {
+        // filter() drops the null the relation type allows; an article always has its primary writer.
+        return collect([$article->author, ...$article->coAuthors])->filter()->unique('id')->values();
     }
 }

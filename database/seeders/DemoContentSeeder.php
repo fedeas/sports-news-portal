@@ -86,13 +86,13 @@ class DemoContentSeeder extends Seeder
     public function run(ImageManager $images, UploadMedia $uploadMedia, GenerateUniqueSlug $generateUniqueSlug, MakeSlug $makeSlug): void
     {
         if (app()->isProduction()) {
-            $this->command?->error('Demo content must never be seeded in production.');
+            $this->command->error('Demo content must never be seeded in production.');
 
             return;
         }
 
         if (Article::query()->withTrashed()->exists()) {
-            $this->command?->warn('Articles already exist; skipping demo content.');
+            $this->command->warn('Articles already exist; skipping demo content.');
 
             return;
         }
@@ -100,7 +100,7 @@ class DemoContentSeeder extends Seeder
         $uploader = User::query()->orderBy('id')->first();
 
         if ($uploader === null) {
-            $this->command?->error('Create a user first (php artisan db:seed).');
+            $this->command->error('Create a user first (php artisan db:seed).');
 
             return;
         }
@@ -150,7 +150,7 @@ class DemoContentSeeder extends Seeder
             }
         }
 
-        $this->command?->info('Demo content created: '.self::ARTICLE_COUNT.' articles.');
+        $this->command->info('Demo content created: '.self::ARTICLE_COUNT.' articles.');
     }
 
     /**

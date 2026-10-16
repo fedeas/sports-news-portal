@@ -7,7 +7,6 @@ use App\Models\Article;
 use App\Models\Comment;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\Rule;
@@ -147,7 +146,7 @@ class Comments extends Component
             ->whereNull('parent_id')
             ->with([
                 'user.author',
-                'replies' => fn (HasMany $query) => $query->approved()->with('user.author')->oldest(),
+                'approvedReplies.user.author',
             ])
             ->latest()
             ->paginate(self::PER_PAGE, pageName: 'comments');

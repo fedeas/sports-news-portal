@@ -53,7 +53,7 @@ class DemoTeamsSeeder extends Seeder
     public function run(MakeSlug $makeSlug): void
     {
         if (app()->isProduction()) {
-            $this->command?->error('Demo content must never be seeded in production.');
+            $this->command->error('Demo content must never be seeded in production.');
 
             return;
         }
@@ -92,7 +92,7 @@ class DemoTeamsSeeder extends Seeder
         $this->seedFixtures($makeSlug, $currentSeason);
         $this->linkDemoArticles($makeSlug, $league);
 
-        $this->command?->info('Demo teams and league ready.');
+        $this->command->info('Demo teams and league ready.');
     }
 
     /**

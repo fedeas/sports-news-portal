@@ -36,7 +36,8 @@ class LiveScores extends Component
     #[Computed]
     public function fixtures(): array
     {
-        $cached = Cache::get(RefreshLiveScores::CACHE_KEY)['fixtures'] ?? [];
+        $entry = Cache::get(RefreshLiveScores::CACHE_KEY);
+        $cached = is_array($entry) && is_array($entry['fixtures'] ?? null) ? $entry['fixtures'] : [];
 
         if ($this->fixtureId === null) {
             return $cached;

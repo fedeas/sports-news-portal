@@ -85,35 +85,25 @@ class GenerateSitemaps
             ['loc' => route('authors.index')],
         ];
 
-        Category::query()->active()->with('parent')->orderBy('id')->get()
-            ->filter(fn (Category $category) => $category->parent_id === null || $category->parent?->is_active)
-            ->each(function (Category $category) use (&$entries) {
-                $entries[] = ['loc' => $category->url(), 'lastmod' => $category->updated_at->toAtomString()];
-            });
+        $subjects = [
+            ...Category::query()->active()->with('parent')->orderBy('id')->get()
+                ->filter(fn (Category $category) => $category->parent_id === null || $category->parent?->is_active),
+            ...Team::query()->active()->orderBy('id')->get(['id', 'slug', 'updated_at']),
+            ...League::query()->active()->orderBy('id')->get(['id', 'slug', 'updated_at']),
+            ...Author::query()
+                ->where('is_active', true)
+                ->whereHas('articles', fn (Builder $query) => $query->published())
+                ->orderBy('id')
+                ->get(['id', 'slug', 'updated_at']),
+            ...Tag::query()
+                ->whereHas('articles', fn (Builder $query) => $query->published())
+                ->orderBy('id')
+                ->get(['id', 'slug', 'updated_at']),
+        ];
 
-        foreach ([Team::class, League::class] as $model) {
-            $model::query()->active()->orderBy('id')->get(['id', 'slug', 'updated_at'])
-                ->each(function (Team|League $subject) use (&$entries) {
-                    $entries[] = ['loc' => $subject->url(), 'lastmod' => $subject->updated_at->toAtomString()];
-                });
+        foreach ($subjects as $subject) {
+            $entries[] = ['loc' => $subject->url(), 'lastmod' => $subject->updated_at->toAtomString()];
         }
-
-        Author::query()
-            ->where('is_active', true)
-            ->whereHas('articles', fn (Builder $query) => $query->published())
-            ->orderBy('id')
-            ->get(['id', 'slug', 'updated_at'])
-            ->each(function (Author $author) use (&$entries) {
-                $entries[] = ['loc' => $author->url(), 'lastmod' => $author->updated_at->toAtomString()];
-            });
-
-        Tag::query()
-            ->whereHas('articles', fn (Builder $query) => $query->published())
-            ->orderBy('id')
-            ->get(['id', 'slug', 'updated_at'])
-            ->each(function (Tag $tag) use (&$entries) {
-                $entries[] = ['loc' => $tag->url(), 'lastmod' => $tag->updated_at->toAtomString()];
-            });
 
         return $entries;
     }
